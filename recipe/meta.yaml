@@ -38,6 +38,11 @@ requirements:
 test:
   imports:
     - anthropic
+    - anthropic.lib
+    - anthropic.types
+    - anthropic.resources
+  source_files:
+    - tests
   commands:
     - pip check
   requires:
