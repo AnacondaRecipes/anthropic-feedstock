@@ -17,7 +17,6 @@ build:
 requirements:
   host:
     - python
-    - poetry-core >=1.0.0
     - hatch-fancy-pypi-readme
     - hatchling >=1.26.3
     - pip
