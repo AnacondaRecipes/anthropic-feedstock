@@ -33,7 +33,18 @@ requirements:
     - cached-property
     - jiter >=0.4.0,<1
 
+# ModuleNotFoundError: No module named 'respx'
+{% set ignore_tests = " --ignore=tests/api_resources" %}
+{% set ignore_tests = ignore_tests + " --ignore=tests/lib/streaming/test_messages.py" %}
+{% set ignore_tests = ignore_tests + " --ignore=tests/lib/test_bedrock.py" %}
+{% set ignore_tests = ignore_tests + " --ignore=tests/lib/test_vertex.py" %}
+{% set ignore_tests = ignore_tests + " --ignore=tests/test_client.py" %}
+{% set ignore_tests = ignore_tests + " --ignore=tests/test_files.py" %}
+
 test:
+  source_files:
+    - tests
+    - pyproject.toml
   imports:
     - anthropic
     - anthropic.lib
@@ -43,8 +54,11 @@ test:
     - tests
   commands:
     - pip check
+    - pytest -v {{ ignore_tests }} --ignore=tests/functional --asyncio-mode=auto
   requires:
     - pip
+    - pytest
+    - pytest-asyncio
 
 about:
   home: https://github.com/anthropics/anthropic-sdk-python
