@@ -19,7 +19,7 @@ requirements:
     - python
     - poetry-core >=1.0.0
     - hatch-fancy-pypi-readme
-    - hatchling==1.26.3
+    - hatchling
     - pip
   run:
     - typing_extensions >=4.10,<5
