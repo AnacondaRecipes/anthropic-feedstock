@@ -31,7 +31,12 @@ requirements:
     - sniffio
     - cached-property
     - jiter >=0.4.0,<1
-
+  run_constrained:
+    - google-auth >=2,<3
+    # From google-auth[requests]
+    - requests >=2.20.0,<3.0.0
+    - boto3 >=1.28.57
+    - botocore >=1.31.57
 # ModuleNotFoundError: No module named 'respx'
 {% set ignore_tests = " --ignore=tests/api_resources" %}
 {% set ignore_tests = ignore_tests + " --ignore=tests/lib/streaming/test_messages.py" %}
