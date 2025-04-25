@@ -1,55 +1,81 @@
 {% set name = "anthropic" %}
 {% set version = "0.50.0" %}
 
-
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  url: https://github.com/anthropics/anthropic-sdk-python/archive/v{{ version }}.tar.gz
+  url: https://github.com/anthropics/{{ name }}-sdk-python/archive/v{{ version }}.tar.gz
   sha256: 18214331a4e679428015ce0af7fee157b112b81d4f6be105c70674c03796738b
 
 build:
-  noarch: python
-  script: {{ PYTHON }} -m pip install . -vv
+  script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed --no-cache-dir -vv
   number: 0
+  skip: true  # [py<38]
 
 requirements:
   host:
-    - python {{ python_min }}
-    - poetry-core >=1.0.0
+    - python
     - hatch-fancy-pypi-readme
-    - hatchling
+    - hatchling >=1.26.3
     - pip
   run:
     - typing_extensions >=4.10,<5
-    - python >={{ python_min }},<4.0.0
+    - python
     - httpx >=0.25.0,<1
     - pydantic >=1.9.0,<3
-    - typing-extensions >=4.7,<5
+    - typing-extensions >=4.10,<5
     - anyio >=3.5.0,<5
     - distro >=1.7.0,<2
     - sniffio
-    - cached-property
-    - tokenizers >=0.13.0
     - jiter >=0.4.0,<1
+  run_constrained:
+    - google-auth >=2,<3
+    # From google-auth[requests]
+    - requests >=2.20.0,<3.0.0
+    - boto3 >=1.28.57
+    - botocore >=1.31.57
+
+# ModuleNotFoundError: No module named 'respx'
+{% set ignore_tests = " --ignore=tests/api_resources" %}
+{% set ignore_tests = ignore_tests + " --ignore=tests/lib/streaming/test_messages.py" %}
+{% set ignore_tests = ignore_tests + " --ignore=tests/lib/test_bedrock.py" %}
+{% set ignore_tests = ignore_tests + " --ignore=tests/lib/test_vertex.py" %}
+{% set ignore_tests = ignore_tests + " --ignore=tests/test_client.py" %}
+{% set ignore_tests = ignore_tests + " --ignore=tests/test_files.py" %}
 
 test:
+  source_files:
+    - tests
+    - pyproject.toml
   imports:
     - anthropic
+    - anthropic.lib
+    - anthropic.types
+    - anthropic.resources
+  source_files:
+    - tests
   commands:
     - pip check
+    - pytest -v {{ ignore_tests }} --ignore=tests/functional --asyncio-mode=auto
   requires:
     - pip
-    - python {{ python_min }}
+    - pytest
+    - pytest-asyncio
 
 about:
   home: https://github.com/anthropics/anthropic-sdk-python
   license: MIT
   license_file: LICENSE
+  license_family: MIT
   summary: Library for accessing the anthropic API
+  description: |
+    The Anthropic Python SDK is a library for accessing the anthropic API.
+    It provides a simple and intuitive interface for making requests to the API and handling responses.
+    The SDK is designed to be easy to use and integrate into your existing Python projects.
   doc_url: https://console.anthropic.com/docs
+  dev_url: https://github.com/anthropics/anthropic-sdk-python
 
 extra:
   recipe-maintainers:
