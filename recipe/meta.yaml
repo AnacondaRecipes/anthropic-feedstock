@@ -17,8 +17,8 @@ package:
   version: {{ version }}
 
 source:
-  url: https://github.com/anthropics/{{ name }}-sdk-python/archive/v{{ version }}.tar.gz
-  sha256: 4e8451b681a41224daaf6667e8f56419fa237715d045fefaef1f07190f038fed
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  sha256: 650dee9e023afb16395939ee4104bbc21f966b380210119fb91122c12099c79a
 
 build:
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed --no-cache-dir -vv
@@ -49,8 +49,7 @@ requirements:
     # [aws] / [bedrock] extras
     - boto3 >=1.28.57
     - botocore >=1.31.57
-    # [aiohttp] extra
-    - aiohttp
+    # [aiohttp] extra (aiohttp itself has no upstream version bound; omitted as a bare entry would be a solver no-op)
     - httpx_aiohttp >=0.1.9
     # [webhooks] extra
     - standardwebhooks >=1.0.1,<2
