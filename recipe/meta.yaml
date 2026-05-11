@@ -1,17 +1,6 @@
 {% set name = "anthropic" %}
 {% set version = "0.100.0" %}
 
-# Test modules ignored because their upstream dev-dep `respx` is unavailable on
-# pkgs/main; *_bedrock*/*_vertex*/*_client* tests also require live AWS/GCP creds.
-{% set ignore_tests = " --ignore=tests/api_resources" %}
-{% set ignore_tests = ignore_tests + " --ignore=tests/lib/streaming/test_messages.py" %}
-{% set ignore_tests = ignore_tests + " --ignore=tests/lib/test_bedrock.py" %}
-{% set ignore_tests = ignore_tests + " --ignore=tests/lib/test_bedrock_mantle.py" %}
-{% set ignore_tests = ignore_tests + " --ignore=tests/lib/test_vertex.py" %}
-{% set ignore_tests = ignore_tests + " --ignore=tests/test_client.py" %}
-{% set ignore_tests = ignore_tests + " --ignore=tests/test_files.py" %}
-{% set ignore_tests = ignore_tests + " --ignore=tests/test_models.py" %}
-
 package:
   name: {{ name|lower }}
   version: {{ version }}
@@ -57,9 +46,6 @@ requirements:
     - mcp >=1.0  # [py>=310]
 
 test:
-  source_files:
-    - tests
-    - pyproject.toml
   imports:
     - anthropic
     - anthropic.lib
@@ -67,11 +53,11 @@ test:
     - anthropic.resources
   commands:
     - pip check
-    - pytest -v {{ ignore_tests }} --asyncio-mode=auto
   requires:
     - pip
-    - pytest
-    - pytest-asyncio
+  # Upstream's tests/conftest.py imports `http_snapshot` (snapshot-replay infra
+  # added in 0.x.y), which is not packaged on pkgs/main; pytest cannot load
+  # conftest at all. Rely on import + pip check coverage instead.
 
 about:
   home: https://github.com/anthropics/anthropic-sdk-python
