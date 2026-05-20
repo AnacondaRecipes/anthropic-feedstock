@@ -1,26 +1,26 @@
 {% set name = "anthropic" %}
-{% set version = "0.100.0" %}
+{% set version = "0.103.0" %}
 
 package:
-  name: {{ name|lower }}
+  name: {{ name }}
   version: {{ version }}
 
 source:
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 650dee9e023afb16395939ee4104bbc21f966b380210119fb91122c12099c79a
+  sha256: 69e5b9f63e4206a8845498426e7a27e87b56943cbd6fa9346fc7067fa4bc5e95
 
 build:
-  script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed --no-cache-dir -vv
   number: 0
+  script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed --no-cache-dir -vv
   skip: true  # [py<39]
 
 requirements:
   host:
-    - python
-    - hatch-fancy-pypi-readme
-    # Upstream pins hatchling==1.26.3, but only 1.28+ is on pkgs/main; >= works.
-    - hatchling >=1.26.3
     - pip
+    - python
+    # Upstream pins hatchling==1.26.3, but only 1.28+ is on pkgs/main works for py>313.
+    - hatchling >=1.26.3
+    - hatch-fancy-pypi-readme
   run:
     - python
     - httpx >=0.25.0,<1
@@ -32,18 +32,18 @@ requirements:
     - jiter >=0.4.0,<1
     - docstring_parser >=0.15,<1
   run_constrained:
+    # [aiohttp] extra
+    - httpx_aiohttp >=0.1.9
     # [vertex] extra
     - google-auth >=2,<3
     - requests >=2.20.0,<3.0.0
     # [aws] / [bedrock] extras
     - boto3 >=1.28.57
     - botocore >=1.31.57
-    # [aiohttp] extra (aiohttp itself has no upstream version bound; omitted as a bare entry would be a solver no-op)
-    - httpx_aiohttp >=0.1.9
-    # [webhooks] extra
-    - standardwebhooks >=1.0.1,<2
     # [mcp] extra
     - mcp >=1.0  # [py>=310]
+    # [webhooks] extra
+    - standardwebhooks >=1.0.1,<2
 
 test:
   imports:
