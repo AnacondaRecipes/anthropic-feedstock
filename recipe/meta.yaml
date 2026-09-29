@@ -19,22 +19,20 @@ requirements:
     - pip
     - python
     # Upstream pins hatchling==1.26.3, but only 1.28+ is on pkgs/main works for py>313.
-    - hatchling ==1.26.3
+    - hatchling >=1.26.3
     - hatch-fancy-pypi-readme >=22.4,<26
   run:
     - python
-    - httpx >=0.25.0,<1
+    - httpx2 >=2.0.0,<3
     - pydantic >=1.10.0,<3
     - typing_extensions >=4.14,<5
     - anyio >=4.1.0,<5
-    - distro >=1.7.0,<2
     - sniffio >=1,<2
     - jiter >=0.4.0,<1
     - docstring_parser >=0.15,<1
-    - httpx2 >=2.0.0,<3
   run_constrained:
     # [aiohttp] extra
-    - httpx_aiohttp >=0.1.9
+    - aiohttp >=3.10.0,<4
     # [vertex] extra
     - google-auth >=2,<3
     - requests >=2.20.0,<3.0.0
@@ -42,10 +40,9 @@ requirements:
     - boto3 >=1.28.57,<2
     - botocore >=1.31.57,<2
     # [mcp] extra
-    - mcp >=1.0  # [py>=310]
+    - mcp >=1.0,<3 # [py>=310]
     # [webhooks] extra
     - standardwebhooks >=1.0.1,<2
-    - aiohttp >=3.10.0,<4
 
 test:
   imports:
@@ -82,3 +79,6 @@ extra:
     - moritzwilksch
     - siboehm
     - x5a
+  skip-lints:
+    # doc_url is reachable
+    - reachable_url
