@@ -68,7 +68,7 @@ about:
     The Anthropic Python SDK is a library for accessing the anthropic API.
     It provides a simple and intuitive interface for making requests to the API and handling responses.
     The SDK is designed to be easy to use and integrate into your existing Python projects.
-  doc_url: https://console.anthropic.com/docs
+  doc_url: https://platform.claude.com/docs/en/home
   dev_url: https://github.com/anthropics/anthropic-sdk-python
 
 extra:
