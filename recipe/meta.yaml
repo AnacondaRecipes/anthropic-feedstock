@@ -1,5 +1,5 @@
 {% set name = "anthropic" %}
-{% set version = "0.120.0" %}
+{% set version = "1.7.0" %}
 
 package:
   name: {{ name }}
@@ -7,12 +7,12 @@ package:
 
 source:
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 6ba6007dc9b00365b20f6101a6618f5196ac1ceef81512e4b5cc0e7436d4975d
+  sha256: 0ab1b04668606ba1ae93f6d9e8dcc2e0c4f0debebd4eea4773a3a595f0836db1
 
 build:
   number: 0
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed --no-cache-dir -vv
-  skip: true  # [py<39]
+  skip: true  # [py<310]
 
 requirements:
   host:
@@ -20,28 +20,27 @@ requirements:
     - python
     # Upstream pins hatchling==1.26.3, but only 1.28+ is on pkgs/main works for py>313.
     - hatchling >=1.26.3
-    - hatch-fancy-pypi-readme
+    - hatch-fancy-pypi-readme >=22.4,<26
   run:
     - python
-    - httpx >=0.25.0,<1
-    - pydantic >=1.9.0,<3
+    - httpx2 >=2.0.0,<3
+    - pydantic >=1.10.0,<3
     - typing_extensions >=4.14,<5
-    - anyio >=3.5.0,<5
-    - distro >=1.7.0,<2
-    - sniffio
+    - anyio >=4.1.0,<5
+    - sniffio >=1,<2
     - jiter >=0.4.0,<1
     - docstring_parser >=0.15,<1
   run_constrained:
     # [aiohttp] extra
-    - httpx_aiohttp >=0.1.9
+    - aiohttp >=3.10.0,<4
     # [vertex] extra
     - google-auth >=2,<3
     - requests >=2.20.0,<3.0.0
     # [aws] / [bedrock] extras
-    - boto3 >=1.28.57
-    - botocore >=1.31.57
+    - boto3 >=1.28.57,<2
+    - botocore >=1.31.57,<2
     # [mcp] extra
-    - mcp >=1.0  # [py>=310]
+    - mcp >=1.0,<3 # [py>=310]
     # [webhooks] extra
     - standardwebhooks >=1.0.1,<2
 
@@ -69,7 +68,7 @@ about:
     The Anthropic Python SDK is a library for accessing the anthropic API.
     It provides a simple and intuitive interface for making requests to the API and handling responses.
     The SDK is designed to be easy to use and integrate into your existing Python projects.
-  doc_url: https://console.anthropic.com/docs
+  doc_url: https://platform.claude.com/docs/en/home
   dev_url: https://github.com/anthropics/anthropic-sdk-python
 
 extra:
@@ -80,3 +79,6 @@ extra:
     - moritzwilksch
     - siboehm
     - x5a
+  skip-lints:
+    # doc_url is reachable
+    - reachable_url
